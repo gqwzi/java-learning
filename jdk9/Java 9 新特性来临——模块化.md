@@ -1,0 +1,188 @@
+
+# [原文](https://zhuanlan.zhihu.com/p/24800180)
+
+# Java 9的模块化--壮士断"腕"的涅槃
+
+## 前言
+今年，2017年，我们将迎来 Java 语言的 22 岁生日，22岁，
+对于一个人而言，正是开始大展鸿图的年纪，可是对于日新月异的科技圈中的一门开发语言而言，
+却是一个傲视群雄的老态龙钟的年纪。
+
+![](../images/jdk9/jvm-history-dev.jpeg)
+
+图片是JVM 语言发展史
+
+
+JVM 家族也是在这22年中茁壮发展，
+并且都秉承着 Java 的革命口号：一处编译，随处运行【JVM 是不跨平台的，每个操作系统都有对应安装包】。
+那么，JVM 的带头人 Java 在 9.0 的版本中带来了什么变化呢？
+
+
+
+## 模块化
+今天介绍一个Java 9的功能，模块化(Modular)；这可能使Java有史以来最大的Feature，
+
+它将自己长期依赖JRE的结构，转变成以Module为基础的组件，
+这感觉就像一个壮士，需要把自己的胳膊，腿等，一个个拆下来，并且还能够正常运行工作，难度可想而知。
+虽然，Java 9尚未发布，但这个功能让人期盼和煎熬了好多年了。
+
+
+从1995年的第一天起，Java带着一个口号，“Write once , Run anywhere” ，
+一路走来，从学院派的实验语言，变成开发者最青睐的语言，然后成为企业开发的统一语言，二十弱冠。
+时光如斯，Java也从一个创新的语言，慢慢变成一种“传统”，“老旧”，“经典”语言，同时也接受很多新鲜语言的挑战，例如Go，Scalar等。
+
+
+Java从来就不是一种完美的语言：GC的效率总是给高并发程序员带来不少痛苦和调整，
+Classpath地狱总是让很多错误诡异的发生，高级语言特性总是在JCP(Java Community Process)里面踢皮球而无法落地，
+异步模式的多线程编程总是有陡峭的学习曲线，Oracle JDK和OpenSDK总是有扯不清楚的关系，孤芳自傲且让人崩溃的J2EE框架。
+
+
+但是，我还是最喜欢Java编程语言，不仅因为使用了20年，更有两个原因：
+
+1. Java的生态：几乎所有开发库都支持Java语言，Java是打开程序世界的钥匙。
+2. Java语言的开源：Java源代码设计流畅，可以学到很多设计技能。
+
+
+模块化从Java 7就开始计划推出 ，但由于其过于复杂，不断跳票 Java 7和Java 8，终于计划在Java 9中推出，
+我们一起拭目以待吧！ 目前，Java 9的功能基本开发完毕，剩下半年的时间，解决各种Bug。下面是Java 9的时间表！
+ 
+ 
+ ![](../images/jdk9/java9-schedule.jpeg)
+ 图片：Java 9的时间表
+ 
+ 
+ Java 9中最重要的功能，毫无疑问就是模块化（Module），代码名字叫做Jigsaw(拉锯），
+ 这个拉锯项目拉了几年，终于要把庞大冗余的Java锯成一个个的Module，方便开发和部署。
+ 熟悉Java的同学，都知道JRE有一个超级大rt.jar（例如，Java 8的rt.jar中有65M），
+ 运行一个hello world，你也需要一个数百兆的JRE环境，如果在J2EE环境，情况将变得复杂无比。
+ 另外，如果你没有深受Classpath Hell所害，说明你还不是一个深度Java程序员。
+  
+![](../images/jdk9/java9_module_vs_java_old.jpeg)
+
+
+### 模块化的功能有几个目的：
+
+1. 让Java的SE程序更加容易轻量级部署
+2. 改进组件间的依赖管理，引入比Jar粒度更大的Module
+3. 改进性能和安全性
+
+如果用更加简单解释，那就是“解决Classpath地狱问题，改进部署能力”。
+Module的内容比较多，为了由浅入深，我按照一些问题和我的理解来介绍模块化。
+
+#### 1.什么是Java Module(模块）
+模块就是代码和数据的封装体，代码是指一些包括类型的Packages。
+Package是一些类路径名字的约定，而模块是一个或多个Packages组成的一个封装体。
+
+![](../images/jdk9/java9_what_is_module.jpeg)
+
+
+
+
+ #### 2. 模块的代码例子
+ 模块的是通过module-info.java进行定义，编译后打包后，就成为一个模块的实体；
+ 在模块的定义文件中，我们需要指定模块之间的依赖靠关系，
+ 可以exports给那些模块用，需要使用那些模块(requires) 。下面是一个例子：
+ 
+ 
+ ```java
+module com.foo.bar {
+requires org.baz.qux;
+exportscom.foo.bar.alpha;
+exportscom.foo.bar.beta;
+}
+META-INF/
+META-INF/MANIFEST.MF
+module-info.class
+com/foo/bar/alpha/AlphaFactory.class
+com/foo/bar/alpha/Alpha.class
+...
+
+ 
+```
+
+#### 3.JDK8 和JDK9有什么不一样？
+JDK８的JRE的部署是一个单体模式，一个超大的rt.jar(大约60多兆），tools.jar也有几十兆，
+即使使用一个Hello Worlds，你也需要一整套上百兆的JRE环境。
+
+JAVA 9 引入模块后，将所有的类组织成模块形式，模块之间有着优美的依赖关系（至少现在很整齐，不知道过几个版本会不会继续保持优雅）。
+
+![](../images/jdk9/java9-before-relation.jpeg)
+Java 8的包之间的依赖关系
+
+
+![](../images/jdk9/java9-module-all.jpeg)
+Java9的依赖关系（模块之间依赖关系）
+
+#### 4. Public 不再意味着Accessible(可访问了)
+
+模块之间的关系被称作readability（可读性），代表一个模块是否可以找到这个模块文件，并且读入系统中（注意：并非代表可以访问其中的类型）。
+在实际的代码，一个类型对于另外一个类型的调用，我们称之为可访问性(Accessible)，这意味着可以使用这个类型； 
+可访问性的前提是可读性，换句话说，现有模块可读，然后再进一步检测可访问性（安全）。
+在Java 9中， Public不再意味着任意的可访问性！
+ 
+ 
+![](../images/jdk9/java9-public.jpeg)
+Public不再意味着任意的可访问性
+
+![](../images/jdk9/java9-module-relation.jpeg)
+模块之间的关联关系
+ 
+ 
+
+#### 5.什么是模块的Transitive 引用（间接引用）
+
+举个例子：
+
+![](../images/jdk9/java9-module-Transitive.jpeg)
+
+因此标记了transitive可以可以提供一个间接可读性。在myapp中，可以直接引用Logger类了。
+
+![](../images/jdk9/java9-module-read.jpeg)
+
+#### 6. Module 和Maven是什么关系
+看完Module，这么详细的表达依赖关系，是不是和什么软件很相似？
+是不是想起了Maven还是Gradle? 仔细想象，Modular和它们还是不一样的。
+
+> Modular是系统内置用于表述组件之间的关系，对于版本的管理还是处于最原始的状体。它管理一种强制的依赖关系。\
+  Maven有两个核心功能 a) 组件的依赖管理，特别是版本的管理，
+  这种依赖是逻辑上的，并非强制的 b)管理开发过程中的各种任务，初始化，测试等等。
+  
+  
+#### 7. JLink介绍
+JLink是将Module进行打包的工具，帮助目标机器的部署。打包后的文件将非常精简。  
+
+![](../images/jdk9/java9-JLink.jpeg)
+jLink工作示意图
+
+
+![](../images/jdk9/java9-JLink-path.jpeg)
+jLink工作指令示范
+
+
+
+
+### 8 Module的原理和实现
+在内部实现中，整个过程非常繁琐复杂，大概有几件事情；
+
+#### a)将系统内部类进行模块化
+这样不用在区分太多J2ME, J2SE，J2EE了，大家都是用模块作为沟通语言。
+这需要整理所有的类和它们调用关系，调用频次等，把系统类模块化，这可能最复杂的一部分，不过结果是完美的。
+
+#### b) 将ClassLoader分级
+将ClassLoader分为三个级别，Bootstrap Loader具有最高优先级和权限，
+主要是核心的系统类；Platform Loader用于扩展的一些系统类，例如SQL,XML等；Application Loader主要用于应用程序的Loader。
+在这三个级别的Loader下面有一个统一Module 管理，用于控制和管理模块间的依赖关系，可读性，可访问性等。
+ 注意，ClassLoader在Java 9中的类装载逻辑和之前一样，
+ 但是，通过模块管理系统，ClassLoader.FindClass的能力，
+ 将被限制在readable&accessible的条件下，而不是之前的简单的Public条件。
+
+![](../images/jdk9/java9-ClassLoader.jpeg)
+
+
+
+
+
+ 
+ 
+ 
+ 
