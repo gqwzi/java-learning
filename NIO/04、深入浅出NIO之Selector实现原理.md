@@ -31,7 +31,7 @@ Buffer和Channel在深入浅出NIO之Channel、Buffer一文中已经介绍过，
 
 在这里，这个人就相当Selector，每个鸡笼相当于一个SocketChannel，每个线程通过一个Selector可以管理多个SocketChannel。
 
-![](../../images/basic/nio/SocketChannel_1.png)
+![](../images/nio/SocketChannel_1.png)
 
 为了实现Selector管理多个SocketChannel，必须将具体的SocketChannel对象注册到Selector，
 并声明需要监听的事件（这样Selector才知道需要记录什么数据），一共有4种事件：
@@ -159,9 +159,9 @@ WindowsSelectorImpl(SelectorProvider sp) throws IOException {
 pollWrapper用Unsafe类申请一块物理内存pollfd，存放socket句柄fdVal和events，
 其中pollfd共8位，0-3位保存socket句柄，4-7位保存events。
 
-![](../../images/basic/nio/pollWrapper_1.png)
+![](../images/nio/pollWrapper_1.png)
 
-![](../../images/basic/nio/pollWrapper_2.png)
+![](../images/nio/pollWrapper_2.png)
 
 pollWrapper提供了fdVal和event数据的相应操作，如添加操作通过Unsafe的putInt和putShort实现。
 

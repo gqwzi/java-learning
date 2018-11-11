@@ -341,7 +341,7 @@ static int read(FileDescriptor var0, ByteBuffer var1, long var2, NativeDispatche
 注：堆外内存的创建（unsafe.cpp）：
 
 // 仅仅作了对齐以及将长度放在数组前方就返回了
-```c
+```cpp
 UNSAFE_ENTRY(jlong, Unsafe_AllocateMemory(JNIEnv *env, jobject unsafe, jlong size))
   UnsafeWrapper("Unsafe_AllocateMemory");
   size_t sz = (size_t)size;
@@ -360,5 +360,5 @@ UNSAFE_ENTRY(jlong, Unsafe_AllocateMemory(JNIEnv *env, jobject unsafe, jlong siz
   return addr_to_java(x);
 UNSAFE_END
 
-``
+```
 
