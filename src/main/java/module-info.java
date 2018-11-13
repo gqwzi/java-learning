@@ -10,5 +10,6 @@ module java.main {
     requires jdk.httpserver;
     requires java.compiler;
     requires disruptor;
+    requires java.instrument;
 
 }

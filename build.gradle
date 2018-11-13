@@ -18,3 +18,11 @@ dependencies {
     compile group: 'com.lmax', name: 'disruptor', version: '3.4.2'
 
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'java.lang.instrument.Instrumentation.MyAgent'
+        attributes 'Class-Path': 'my-lib.jar'
+
+    }
+}
