@@ -45,14 +45,14 @@ public class Agent {
 ```
 
 javaagent只能使用jar包运行，所以需要将该javaagent类导出生成jar包。以IDEA为例：
-        》在src目录下创建 META-INF/MANIFEST.MF 文件，内容按如下定义（注意为4行，第4行为空行）：
 
-           
+》在src目录下创建 META-INF/MANIFEST.MF 文件，内容按如下定义（注意为4行，第4行为空行）：
+
 ```java
-
 Manifest-Version: 1.0
 Premain-Class: com.google.agent.Agent
 Can-Redefine-Classes: true
+
 ```
 》File--Project Structure...--Project Setting--Artifacts,使用+号新加一个Artifacts,如图：
 
