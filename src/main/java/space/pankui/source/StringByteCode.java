@@ -9,8 +9,12 @@ package space.pankui.source;
  */
 public class StringByteCode {
 
-    String str = "asdf";
+
 
   //  String temp = new String("aaa");
+
+    public static void main(String[] args) {
+        String str = "asdf";
+    }
 
 }
