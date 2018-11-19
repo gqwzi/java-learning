@@ -17,12 +17,12 @@ dependencies {
     compile group: 'com.lmax', name: 'disruptor', version: '3.4.2'
 
    // compile group: 'net.java.dev.jna', name: 'jna', version: '5.1.0'
-    compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '4.3.0'
+   // compile group: 'net.sourceforge.tess4j', name: 'tess4j', version: '4.3.0'
 
-    compile("net.sourceforge.tess4j:4.3.0"){
+  /*  compile("net.sourceforge.tess4j:4.3.0"){
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'com.sun.jna', module: 'jna'
-    }
+    }*/
 
 }
 
