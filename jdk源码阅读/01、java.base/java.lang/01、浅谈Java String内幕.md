@@ -23,6 +23,7 @@ public class StringDemo01 {
 ```
 很简单的一段代码，通过命令 javap -verbose 查看class文件中 Constant pool 实现：
 
+截取 Constant pool 部分
 ```java
 Constant pool:
    #1 = Methodref          #4.#20         // java/lang/Object."<init>":()V

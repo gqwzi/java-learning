@@ -5,7 +5,7 @@
 
 
 ## 正文
-TreeMap底层是基于[红黑树（Red-Black tree）实现](https://github.com/pankui/algorithms/blob/master/note/05%E3%80%81%E7%BA%A2%E9%BB%91%E6%A0%91.md)，
+TreeMap底层是基于[红黑树（Red-Black tree）实现](https://github.com/pankui/algorithms/blob/master/note/03%E3%80%81%E6%A0%91/05%E3%80%81%E7%BA%A2%E9%BB%91%E6%A0%91.md)，
 所以在学习TreeMap之前先去了解下红黑树。
 
 
