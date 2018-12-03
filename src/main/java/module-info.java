@@ -11,6 +11,7 @@ module java.main {
     requires java.compiler;
     requires disruptor;
     requires java.instrument;
+    requires jdk.scripting.nashorn;
     //requires tess4j;
     //requires org.apache.commons.io;
     //requires org.apache.log4j;
