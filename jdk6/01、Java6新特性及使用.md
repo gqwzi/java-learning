@@ -855,7 +855,7 @@ public class NetworkServerDerbyTest {
 
 JDBC4.0 主要有以下改进和新特性。
 
-- 自动加载java.sql.Driver，而不需要再调用class.forName([参考 SPI](java-spi.md))；
+- 自动加载java.sql.Driver，而不需要再调用class.forName([参考 SPI](07、java-spi.md))；
 - 添加了java.sql.RowId数据类型用来可以访问sql rowid；
 - 添加了National Character Set的支持；
 - 增强了BLOB和CLOB的支持功能；

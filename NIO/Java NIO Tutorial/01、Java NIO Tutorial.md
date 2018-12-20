@@ -2,6 +2,8 @@
 
 ## [原文](http://tutorials.jenkov.com/java-nio/channel-to-channel-transfers.html)
 
+## [译文](http://ifeve.com/java-nio-all/)
+
 # Java NIO Tutorial
 
 Java NIO (New IO) is an alternative(代替) IO API for Java (from Java 1.4), 
