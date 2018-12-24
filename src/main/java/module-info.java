@@ -12,6 +12,7 @@ module java.main {
     requires disruptor;
     requires java.instrument;
     requires jdk.scripting.nashorn;
+    requires java.sql;
 
 
 }
