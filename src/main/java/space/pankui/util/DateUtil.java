@@ -23,13 +23,13 @@ import java.util.List;
 public class DateUtil {
 
 
-    public static final String YYYY_MM_DD_HH_mm_SS = "YYYY-MM-dd HH:mm:ss";
+    public static final String yyyy_MM_DD_HH_mm_SS = "yyyy-MM-dd HH:mm:ss";
 
     public static final String HH_mm = "HH:mm";
 
-    public static final String YYYY_MM_DD = "YYYY-MM-dd";
+    public static final String yyyy_MM_DD = "yyyy-MM-dd";
 
-    public static final String YYYYMMDD = "YYYYMMdd";
+    public static final String YYYYMMDD = "yyyyMMdd";
 
 
     /**
@@ -139,7 +139,7 @@ public class DateUtil {
         LocalDate localDate = getSundayByDay(day);
         LocalTime endLocalTime = LocalTime.of(23, 30, 0);
         LocalDateTime end = LocalDateTime.of(localDate, endLocalTime);
-        return parseLocalDateTimeToString(end, YYYY_MM_DD_HH_mm_SS);
+        return parseLocalDateTimeToString(end, yyyy_MM_DD_HH_mm_SS);
     }
 
     /**
@@ -151,7 +151,7 @@ public class DateUtil {
 
     public static String getDateByDay(long day) {
         LocalDate localDate = getDayDate(day);
-        return parseLocalDateToString(localDate, YYYY_MM_DD);
+        return parseLocalDateToString(localDate, yyyy_MM_DD);
     }
 
     public static String getNowDateStr(String pattern) {
@@ -166,17 +166,17 @@ public class DateUtil {
 
     public static String getMondayMinDateTimeStrByWeek(long week) {
         LocalDateTime localDateTime = getMondayMinDateTimeByWeek(week);
-        return parseLocalDateTimeToString(localDateTime, YYYY_MM_DD_HH_mm_SS);
+        return parseLocalDateTimeToString(localDateTime, yyyy_MM_DD_HH_mm_SS);
     }
 
 
     public static String getSundayMaxDateTimeStrByWeek(long week) {
         LocalDateTime localDateTime = getSundayMaxDateTimeByWeek(week);
-        return parseLocalDateTimeToString(localDateTime, YYYY_MM_DD_HH_mm_SS);
+        return parseLocalDateTimeToString(localDateTime, yyyy_MM_DD_HH_mm_SS);
     }
 
     public static String parseLocalDateTimeToString(LocalDateTime localDateTime) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(YYYY_MM_DD_HH_mm_SS);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(yyyy_MM_DD_HH_mm_SS);
         return localDateTime.format(dateTimeFormatter);
     }
 
@@ -226,7 +226,7 @@ public class DateUtil {
     }
 
     /**
-     * 获取 周一到周日的日期 YYYY_MM_DD 格式
+     * 获取 周一到周日的日期 yyyy_MM_DD 格式
      * 当前周 0
      * 上一周 -1
      * 下周 1
@@ -239,11 +239,11 @@ public class DateUtil {
         while (sunday.isAfter(monday)) {
 
             LocalDate localDate = monday;
-            String result = parseLocalDateToString(localDate, YYYY_MM_DD);
+            String result = parseLocalDateToString(localDate, yyyy_MM_DD);
             list.add(result);
             monday = monday.plusDays(1);
         }
-        String result = parseLocalDateToString(monday, YYYY_MM_DD);
+        String result = parseLocalDateToString(monday, yyyy_MM_DD);
         list.add(result);
         return list;
     }
@@ -267,7 +267,7 @@ public class DateUtil {
     public static String parseTimeStampToString(Long time) {
         Timestamp timestamp = new Timestamp(time);
         LocalDateTime localDateTime = timestamp.toLocalDateTime();
-        return parseLocalDateTimeToString(localDateTime, YYYY_MM_DD);
+        return parseLocalDateTimeToString(localDateTime, yyyy_MM_DD);
     }
 
     /**
