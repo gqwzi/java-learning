@@ -2,6 +2,8 @@
 
 ## [原文](https://www.jianshu.com/p/47382625934d)
 
+## [原文2](https://blog.csdn.net/fuyuwei2015/article/details/83825851)
+
 # Java Timer 定时任务实现原理及缺陷分析
 
 - Timer是起一个工作线程，然后挨个执行任务队列的中任务。
@@ -106,11 +108,20 @@ timer底层是把一个个任务放在一个TaskQueue中，TaskQueue是以平衡
                 task.period = period;
                 task.state = TimerTask.SCHEDULED;
             }
-
+            // 添加单队列里面
             queue.add(task);
-            if (queue.getMin() == task)
+            // 这里判断是最小的就去唤醒线程，不管定时任务时间是否已经到，下面的 mainLoop 判断时间.
+            if (queue.getMin() == task){
+                // 唤醒线程去执行
                 queue.notify();
+             }
         }
+    }
+```
+获取数组第二条记录，因为保存到数组是从1 开始的
+```java
+  TimerTask getMin() {
+        return queue[1];
     }
 ```
 
@@ -170,6 +181,8 @@ class TaskQueue {
 在Timer中定义了一个内部类 TimerThread，负责执行队列中的任务
 
 我们主要来看下周期性调度通过什么方式实现的，我们直接来分析源码如下：
+
+mainLoop() 是在线程里面调用，上面说了在添加任务的时候就唤醒线程
 
 ```java
 private void mainLoop() {
@@ -231,6 +244,15 @@ private void mainLoop() {
 
 - 获取完成后，然后把queue的TimerTask[1] =task2，TimerTask[2]=task1
 
+```java
+ /**
+     * Return the "head task" of the priority queue.  (The head task is an
+     * task with the lowest nextExecutionTime.)
+     */
+    TimerTask getMin() {
+        return queue[1];
+    }
+```
 - 然后执行获取的task.run()。
  
 
@@ -266,7 +288,24 @@ private void mainLoop() {
 ```
 
 
+## ScheduledExecutorService 代替 Timer
 
+基于上述Timer的两个致命缺陷，在以后的开发中尽可能使用ScheduledExecutorService(JDK1.5以后)替代Timer。
+
+ScheduledExecutorService是基于线程池的，可以开启多个线程进行执行多个任务，每个任务开启一个线程，这样就可以避免上述的两个致命缺陷。
+
+## Timer 的 schedule 和 scheduleAtFixedRate
+
+1. schedule：每次执行完当前任务后，然后间隔一个period的时间再执行下一个任务，因此执行时间会不断延后。
+比如每次的任务执行时间为2秒，period时间为1秒，那么就相当于每3秒执行一次任务。
+
+ 
+2. scheduleAtFixedRate：每次执行时间为上一次任务开始起向后推一个period间隔，
+也就是说下次执行时间相对于上一次任务开始的时间点，因此执行时间不会延后，但是存在任务并发执行的问题。
+
+并发问题：比如任务每间隔3秒执行一次，突然有一次任务执行了6秒钟，因为6秒钟可以执行两次任务，所以下次执行就会一下子执行两次该任务。
+
+ 
 
 
 

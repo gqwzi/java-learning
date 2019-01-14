@@ -23,7 +23,7 @@ public class TimerDemo {
                 try {
                     TimeUnit.SECONDS.sleep(2);
                     // 异常会导致所有的定时任务都会停
-                    throw new RuntimeException("task1 run ...  execute time RuntimeException");
+                   // throw new RuntimeException("task1 run ...  execute time RuntimeException");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -43,6 +43,16 @@ public class TimerDemo {
         };
 
         Timer t = new Timer();
+        // 这里在往队列里面添加 定时任务，然后定时任务里会去唤醒线程
+        /**
+         * private void sched(TimerTask task, long time, long period) {
+         *  // 其他代码省略
+         *   queue.add(task);
+         *             if (queue.getMin() == task){
+         *                 queue.notify();
+         *              }
+         *  }
+         * */
         t.schedule(task1, 0,1000);
         t.schedule(task2, 0,1000);
     }
