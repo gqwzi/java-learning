@@ -2,7 +2,9 @@
 
 # synchronized原理
 
-synchronized (this)原理：涉及两条指令：monitorenter，monitorexit；再说同步方法，从同步方法反编译的结果来看，
+synchronized (this)原理：涉及两条指令：monitorenter，monitorexit；
+
+再说同步方法，从同步方法反编译的结果来看，
 方法的同步并没有通过指令monitorenter和monitorexit来实现，
 相对于普通方法，其常量池中多了ACC_SYNCHRONIZED标示符。
 
