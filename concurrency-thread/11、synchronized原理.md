@@ -16,4 +16,50 @@ JVM就是根据该标示符来实现方法的同步的：当方法被调用时�
 这个问题会接着追问：java对象头信息，偏向锁，轻量锁，重量级锁及其他们相互间转化。
 
 
+## 深入理解Synchronized实现原理
+
+我们最初学习Java的时候，遇到多线程我们会知道synchronized，对于当时的我们来说synchronized是保证了多线程之间的同步，也成为了我们解决多线程情况的常用手段。但是，随着我们学习的进行我们知道synchronized是一个重量级锁，相对于Lock，它会显得那么笨重，以至于我们认为它不是那么的高效而慢慢摒弃它。
+但是，随着Javs SE 1.6对synchronized进行的各种优化后，synchronized并不会显得那么重了。下面跟随LZ一起来探索synchronized的实现机制、Java是如何对它进行了优化、锁优化机制、锁的存储结构和升级过程；
+
+## synchronized的实现机制
+Java对象头和monitor是实现synchronized的基础！下面就这两个概念来做详细介绍。
+1.Java对象头:Hotspot虚拟机的对象头主要包括两部分数据：Mark Word（标记字段）、Klass Pointer（类型指针）。
+
+Klass Point是对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例;
+Mark Word用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等,它是实现轻量级锁和偏向锁的关键.
+
+2.什么是Monitor？我们可以把它理解为一个同步工具，也可以描述为一种同步机制，它通常被描述为对象监视器。
+当多个线程同时请求某个对象监视器时，对象监视器会设置几种状态用来区分请求的线程：
+
+Contention List：所有请求锁的线程将被首先放置到该竞争队列
+Entry List：Contention List中那些有资格成为候选人的线程被移到Entry List
+Wait Set：那些调用wait方法被阻塞的线程被放置到Wait Set
+OnDeck：任何时刻最多只能有一个线程正在竞争锁，该线程称为OnDeck
+Owner：获得锁的线程称为Owner
+!Owner：释放锁的线程
+
+下图就是多个线程获取锁的示意图
+
+
+
+
+
+
+0_1311821841e55M.gif
+
+新请求锁的线程将首先被加入到ConetentionList中，当某个拥有锁的线程（Owner状态）调用unlock之后，如果发现EntryList为空则从ContentionList中移动线程到EntryList，下面说明下ContentionList和EntryList的实现方式：
+
+ContentionList虚拟队列
+
+ContentionList并不是一个真正的Queue，而只是一个虚拟队列，原因在于ContentionList是由Node及其next指针逻辑构成，并不存在一个Queue的数据结构。ContentionList是一个先进先出（FIFO）的队列，每次新加入Node时都会在队头进行，通过CAS改变第一个节点的的指针为新增节点，同时设置新增节点的next指向后续节点，而取得操作则发生在队尾。显然，该结构其实是个Lock-Free的队列。
+因为只有Owner线程才能从队尾取元素，也即线程出列操作无争用，当然也就避免了CAS的ABA问题。
+
+EntryList
+
+EntryList与ContentionList逻辑上同属等待队列，ContentionList会被线程并发访问，为了降低对ContentionList队尾的争用，而建立EntryList。Owner线程在unlock时会从ContentionList中迁移线程到EntryList，并会指定EntryList中的某个线程（一般为Head）为Ready（OnDeck）线程。Owner线程并不是把锁传递给OnDeck线程，只是把竞争锁的权利交给OnDeck，OnDeck线程需要重新竞争锁。这样做虽然牺牲了一定的公平性，但极大的提高了整体吞吐量，在Hotspot中把OnDeck的选择行为称之为“竞争切换”。
+OnDeck线程获得锁后即变为owner线程，无法获得锁则会依然留在EntryList中，考虑到公平性，在EntryList中的位置不发生变化（依然在队头）。如果Owner线程被wait方法阻塞，则转移到WaitSet队列；如果在某个时刻被notify/notifyAll唤醒，则再次转移到EntryList。
+
+ 
+
+
 
