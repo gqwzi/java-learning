@@ -9,7 +9,7 @@ module java.main {
     requires java.scripting;
     requires jdk.httpserver;
     requires java.compiler;
-    requires disruptor;
+
     requires java.instrument;
     requires jdk.scripting.nashorn;
     requires java.sql;

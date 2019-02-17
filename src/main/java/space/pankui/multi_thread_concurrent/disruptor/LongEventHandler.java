@@ -1,7 +1,5 @@
 package space.pankui.multi_thread_concurrent.disruptor;
 
-import com.lmax.disruptor.EventHandler;
-
 /**
  * @author pankui
  * @date 2018/10/31
@@ -11,11 +9,11 @@ import com.lmax.disruptor.EventHandler;
  * 消费者监听，也就是一个事件处理器。该事件用于获取disruptor存储的数据。
  * </pre>
  */
-public class LongEventHandler implements EventHandler<LongEvent> {
+/*public class LongEventHandler implements EventHandler<LongEvent> {
 
     @Override
     public void onEvent(LongEvent longEvent, long l, boolean b) throws Exception {
         System.out.println(longEvent.getValue());
     }
 
-}
+}*/

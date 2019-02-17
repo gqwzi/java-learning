@@ -1,6 +1,6 @@
 package space.pankui.multi_thread_concurrent.disruptor;
 
-import com.lmax.disruptor.EventFactory;
+//import com.lmax.disruptor.EventFactory;
 
 /**
  * @author pankui
@@ -10,6 +10,7 @@ import com.lmax.disruptor.EventFactory;
  * 需要让disruptor为我们创建事件，声明了一个EventFactory来实例化Event对象。
  * </pre>
  */
+/*
 public class LongEventFactory implements EventFactory {
 
     @Override
@@ -17,3 +18,4 @@ public class LongEventFactory implements EventFactory {
         return new LongEvent();
     }
 }
+*/

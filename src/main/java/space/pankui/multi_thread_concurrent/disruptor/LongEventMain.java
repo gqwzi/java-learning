@@ -1,14 +1,7 @@
 package space.pankui.multi_thread_concurrent.disruptor;
 
-import java.nio.ByteBuffer;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-
-import com.lmax.disruptor.RingBuffer;
-import com.lmax.disruptor.YieldingWaitStrategy;
-import com.lmax.disruptor.dsl.Disruptor;
-import com.lmax.disruptor.dsl.ProducerType;
 
 /**
  * 介绍
@@ -36,7 +29,7 @@ public class LongEventMain {
        // ExecutorService executor = Executors.newCachedThreadPool();
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
         // 创建工厂
-        LongEventFactory factory = new LongEventFactory();
+      //  LongEventFactory factory = new LongEventFactory();
 
         // 创建bufferSize ,也就是RingBuffer大小，必须是2的N次方
         int ringBufferSize = 1024 * 1024; //
@@ -59,7 +52,7 @@ public class LongEventMain {
          * 的性能是最好的，适合用于低延迟的系统。在要求极高性能且事件处理线数小于CPU逻辑核心数的场景中，推荐使用此策略；例如，
          * CPU开启超线程的特性 WaitStrategy YIELDING_WAIT = new YieldingWaitStrategy();
          *
-         */
+       /*  *//*
         Disruptor<LongEvent> disruptor = new Disruptor<LongEvent>(factory, ringBufferSize, threadFactory,
                 ProducerType.SINGLE, new YieldingWaitStrategy());
 
@@ -83,7 +76,7 @@ public class LongEventMain {
             // Thread.sleep(1000);
         }
 
-        disruptor.shutdown();// 关闭 disruptor，方法会堵塞，直至所有的事件都得到处理；
+        disruptor.shutdown();*/// 关闭 disruptor，方法会堵塞，直至所有的事件都得到处理；
         //executor.shutdown();// 关闭 disruptor 使用的线程池；如果需要的话，必须手动关闭， disruptor 在
         // shutdown 时不会自动关闭；
 

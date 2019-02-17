@@ -1,8 +1,6 @@
 package space.pankui.multi_thread_concurrent.disruptor;
 
-import com.lmax.disruptor.RingBuffer;
-
-import java.nio.ByteBuffer;
+//import com.lmax.disruptor.RingBuffer;
 
 /**
  * @author pankui
@@ -20,17 +18,17 @@ import java.nio.ByteBuffer;
  * </pre>
  */
 public class LongEventProducer {
-
+/*
     private final RingBuffer<LongEvent> ringBuffer;
 
     public LongEventProducer(RingBuffer<LongEvent> ringBuffer) {
         this.ringBuffer = ringBuffer;
     }
 
-    /**
+    *//**
      * onData用来发布事件，每调用一次就发布一次事件
      * 它的参数会用过事件传递给消费者
-     */
+     *//*
     public void onData(ByteBuffer bb) {
         //1.可以把ringBuffer看做一个事件队列，那么next就是得到下面一个事件槽（环形buffer下标）
         long sequence = ringBuffer.next();
@@ -45,5 +43,5 @@ public class LongEventProducer {
             // 如果某个请求的 sequence 未被提交，将会堵塞后续的发布操作或者其它的 producer。
             ringBuffer.publish(sequence);
         }
-    }
+    }*/
 }
