@@ -11,7 +11,7 @@ Atomic数据类型有四种类型：AtomicBoolean, AtomicInteger, AtomicLong,
 首先，所有原子操作都是依赖于sun.misc.Unsafe这个类，这个类底层是由C++实现的，
 利用指针来实现数据操作
  
-## [关于CAS](../多线程并发知识点.md)
+## [关于CAS](../01、多线程并发知识点.md)
 一种无锁机制，比较并交换, 操作包含三个操作数 
 - 内存位置（V）
 - 预期原值（A）
