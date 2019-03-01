@@ -40,3 +40,24 @@ public class TestNewDate1 {
 
 }
 ```
+
+
+## 获取当前时间 区分AM 和PM
+
+```java
+//根据时区获取当前时间（不包括日期）
+LocalTime localTime = LocalTime.now(ZoneId.of("GMT+02:30"));
+//LocalTime localTime = LocalTime.now();
+DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+System.out.println(localTime.format(dateTimeFormatter))
+
+
+```
+The output is in AM/PM Format.
+``` 
+Sample output:  3:00 PM
+```
+
+- [参考](https://www.baeldung.com/current-date-time-and-timestamp-in-java-8)
+
+- [参考](https://stackoverflow.com/questions/18734452/display-current-time-in-12-hour-format-with-am-pm/18734539)
